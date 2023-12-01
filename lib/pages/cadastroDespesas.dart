@@ -14,8 +14,30 @@ class _CadastroDespesaPageState extends State<CadastroDespesaPage> {
   TextEditingController valorController = TextEditingController();
   TextEditingController metodoPagamentoController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
+  TextEditingController patrimonioTotalController = TextEditingController();
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    carregarPatrimonioTotal();
+  }
+
+  void carregarPatrimonioTotal() async {
+    try {
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection('usuario').doc('ID_DO_USUARIO').get();
+
+      if (userSnapshot.exists) {
+        double patrimonioTotal = userSnapshot.get('patrimonioTotal') ?? 0.0;
+
+        patrimonioTotalController.text = patrimonioTotal.toString();
+      }
+    } catch (e) {
+      print('Erro ao carregar o patrimônio total: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +80,14 @@ class _CadastroDespesaPageState extends State<CadastroDespesaPage> {
               decoration: InputDecoration(labelText: 'Descrição (opcional)'),
             ),
             SizedBox(height: 16),
+            TextField(
+              controller: patrimonioTotalController,
+              decoration: InputDecoration(
+                labelText: 'Patrimônio Total',
+                enabled: false,
+              ),
+            ),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 cadastrarDespesa();
@@ -78,12 +108,20 @@ class _CadastroDespesaPageState extends State<CadastroDespesaPage> {
     String descricao = descricaoController.text;
 
     try {
+      double patrimonioTotal =
+          double.tryParse(patrimonioTotalController.text) ?? 0.0;
+      patrimonioTotal += valor;
+
       await _firestore.collection('despesas').add({
         'data': data,
         'categoria': categoria,
         'valor': valor,
         'metodoPagamento': metodoPagamento,
         'descricao': descricao,
+      });
+
+      await _firestore.collection('usuario').doc('ID_DO_USUARIO').update({
+        'patrimonioTotal': patrimonioTotal,
       });
 
       limparCampos();
