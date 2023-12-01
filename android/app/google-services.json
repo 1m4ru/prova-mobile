@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1038604876035",
+    "firebase_url": "https://ads-crud-default-rtdb.firebaseio.com",
+    "project_id": "ads-crud",
+    "storage_bucket": "ads-crud.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038604876035:android:ae9b6baa44b0d6dc1fd136",
+        "android_client_info": {
+          "package_name": "com.example.trade_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsr5Fqi4Apy-j6cbGU3JuUUjoLr6dZGKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
